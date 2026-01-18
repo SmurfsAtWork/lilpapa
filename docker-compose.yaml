@@ -1,0 +1,14 @@
+services:
+  lilpapa:
+    container_name: "lilpapa"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: "always"
+    ports:
+      - "26181:3000"
+    stdin_open: true
+    env_file:
+      - .env.docker
+    volumes:
+      - ./papa.db:/app/papa.db

@@ -1,0 +1,17 @@
+.DS_Store
+node_modules
+.env
+.env.*
+!.env.example
+lilpapa
+views/**/*.go
+views/**/*.txt
+_*/
+.*/
+Session.vim
+build-errors.log
+tmp/
+docker-compose-prod.yml
+docker-compose-beta.yml
+papa.db
+lilpapa.db
