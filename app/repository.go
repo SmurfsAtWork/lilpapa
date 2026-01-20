@@ -13,6 +13,7 @@ type Repository interface {
 
 	CreateSmurf(smurf models.Smurf) (models.Smurf, error)
 	GetSmurf(id uint) (models.Smurf, error)
+	GetSmurfByNanoId(nanoId string) (models.Smurf, error)
 	UpdateSmurfPassword(id uint, newPassword string) error
 	DeleteSmurf(id uint) error
 

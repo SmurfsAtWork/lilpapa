@@ -4,6 +4,7 @@ import "time"
 
 type Smurf struct {
 	Id       uint   `gorm:"primaryKey;autoIncrement"`
+	NanoId   string `gorm:"index;unique;not null"`
 	Name     string `gorm:"not null"`
 	Password string `gorm:"not null"`
 

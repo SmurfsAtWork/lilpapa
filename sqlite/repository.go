@@ -7,6 +7,7 @@ import (
 	"github.com/SmurfsAtWork/lilpapa/app"
 	"github.com/SmurfsAtWork/lilpapa/app/models"
 	"github.com/SmurfsAtWork/lilpapa/evy"
+	"github.com/SmurfsAtWork/lilpapa/nanoid"
 	"gorm.io/gorm"
 )
 
@@ -83,6 +84,16 @@ func (r *Repository) GetUserByUsername(username string) (models.User, error) {
 }
 
 func (r *Repository) CreateSmurf(smurf models.Smurf) (models.Smurf, error) {
+	smurf.NanoId = nanoid.New()
+
+	for range 25 {
+		_, err := r.GetSmurfByNanoId(smurf.NanoId)
+		if err != nil {
+			break
+		}
+		smurf.NanoId = nanoid.New()
+	}
+
 	err := tryWrapDbError(
 		gorm.G[models.Smurf](r.client).
 			Create(context.Background(), &smurf),
@@ -102,6 +113,23 @@ func (r *Repository) CreateSmurf(smurf models.Smurf) (models.Smurf, error) {
 func (r *Repository) GetSmurf(id uint) (models.Smurf, error) {
 	smurf, err := gorm.G[models.Smurf](r.client).
 		Where("id = ?", id).
+		First(context.Background())
+	err = tryWrapDbError(err)
+	if _, ok := err.(*ErrRecordNotFound); ok {
+		return models.Smurf{}, &app.ErrNotFound{
+			ResourceName: "smurf",
+		}
+	}
+	if err != nil {
+		return models.Smurf{}, err
+	}
+
+	return smurf, nil
+}
+
+func (r *Repository) GetSmurfByNanoId(nanoId string) (models.Smurf, error) {
+	smurf, err := gorm.G[models.Smurf](r.client).
+		Where("nano_id = ?", nanoId).
 		First(context.Background())
 	err = tryWrapDbError(err)
 	if _, ok := err.(*ErrRecordNotFound); ok {

@@ -64,7 +64,7 @@ cp .env.example .env.docker
 docker compose up -f docker-compose.yml
 ```
 
-5. Run [Azrael](https://github.com/SmurfsAtWork/azrael) with API URL as [localhost:26171](http://localhost:26171) and create a couple of smurfs placeholders.
+5. Run [Azrael](https://github.com/SmurfsAtWork/azrael) with API URL as [localhost:26171](http://localhost:26181) and create a couple of smurfs placeholders.
 
 6. Login your [Smurf](https://github.com/SmurfsAtWork/smurf)s and set them to work.
 

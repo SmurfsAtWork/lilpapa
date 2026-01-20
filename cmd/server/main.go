@@ -73,6 +73,7 @@ func main() {
 	meApi := apis.NewMeApi(usecases)
 	smurfLoginApi := apis.NewSmurfLoginApi(usecases)
 	smurfMeApi := apis.NewSmurfMeApi(usecases)
+	smurfsApi := apis.NewSmurfApi(usecases)
 
 	v1ApisHandler := http.NewServeMux()
 	v1ApisHandler.HandleFunc("POST /login", adminLoginApi.HandleLogin)
@@ -83,7 +84,9 @@ func main() {
 	v1ApisHandler.HandleFunc("GET /me/smurf", smurfAuthMiddleware.AuthApi(smurfMeApi.HandleAuthCheck))
 	v1ApisHandler.HandleFunc("GET /me/smurf/logout", smurfAuthMiddleware.AuthApi(smurfMeApi.HandleLogout))
 
-	// v1ApisHandler.HandleFunc("POST /smurf", nil)
+	v1ApisHandler.HandleFunc("POST /smurf", authMiddleware.AuthApi(smurfsApi.HandleCreateSmurf))
+	v1ApisHandler.HandleFunc("PUT /smurf/{id}/password", authMiddleware.AuthApi(smurfsApi.HandleUpdateSmurfPassword))
+	v1ApisHandler.HandleFunc("DELETE /smurf/{id}", authMiddleware.AuthApi(smurfsApi.HandleDeleteSmurf))
 
 	applicationHandler := http.NewServeMux()
 	applicationHandler.Handle("/v1/", http.StripPrefix("/v1", contenttype.Json(v1ApisHandler)))

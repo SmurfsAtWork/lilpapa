@@ -117,13 +117,12 @@ type LoginSmurfPayload struct {
 }
 
 func (a *Actions) LoginSmurf(params LoginSmurfParams) (LoginSmurfPayload, error) {
-	admin, err := a.app.GetSmurfById(params.Id)
+	smurf, err := a.app.GetSmurfById(params.Id)
 	if err != nil {
 		return LoginSmurfPayload{}, err
 	}
 
-	err = bcrypt.CompareHashAndPassword([]byte(admin.Password), []byte(params.Password))
-	if err != nil {
+	if smurf.Password != params.Password {
 		return LoginSmurfPayload{}, ErrInvalidLoginCredientials{}
 	}
 
